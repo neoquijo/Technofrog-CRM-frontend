@@ -7,11 +7,8 @@ import { useLogoutMutation } from '../api/authApi';
 import { useTheme } from '../providers/ThemeProvider';
 import css from './DashboardLayout.module.css';
 
-interface Props {
-  children: ReactNode
-}
 
-export const DashboardLayout: React.FC<Props> = ({ children }) => {
+export const DashboardLayout: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const [logout] = useLogoutMutation();
   const { theme, toggleTheme } = useTheme();
@@ -61,8 +58,8 @@ export const DashboardLayout: React.FC<Props> = ({ children }) => {
         </header>
 
         <main className={css.content}>
-          {/* <Outlet /> */}
-          {children}
+          <Outlet />
+          {/* {children} */}
         </main>
       </div>
     </div>

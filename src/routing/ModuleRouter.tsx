@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import type { Module, RouteConfig } from '../types/module.types';
 import { ProtectedRoute } from './ProtectedRoute';
 import { DefaultLayout } from '../layouts/DefaultLayout';
@@ -8,37 +8,73 @@ interface ModuleRouterProps {
   modules: Module[];
 }
 
-const renderRoute = (route: RouteConfig, parentPath: string = ''): React.ReactNode => {
-  const Layout = route.layout || DefaultLayout;
-  const fullPath = parentPath + route.path;
-
-  const element = (
-    <ProtectedRoute
-      allowedRoles={route.allowedRoles}
-      unauthorizedComponent={route.unauthorizedComponent}
-      unauthorizedRedirect={route.unauthorizedRedirect}
-    >
-      <Layout>
-        <route.component {...(route.props || {})} />
-        {/* Outlet автоматически подхватит вложенные маршруты */}
-      </Layout>
-    </ProtectedRoute>
-  );
-
-  return (
-    <Route key={fullPath} path={fullPath} element={element}>
-      {/* Рекурсивный рендер subModules */}
-      {route.subModules?.map(subRoute => renderRoute(subRoute, fullPath))}
-    </Route>
-  );
-};
+const wrapWithProtection = (route: RouteConfig, children: React.ReactNode) => (
+  <ProtectedRoute
+    allowedRoles={route.allowedRoles}
+    unauthorizedComponent={route.unauthorizedComponent}
+    unauthorizedRedirect={route.unauthorizedRedirect}
+  >
+    {children}
+  </ProtectedRoute>
+);
 
 export const ModuleRouter: React.FC<ModuleRouterProps> = ({ modules }) => {
+  const allRoutes = modules.flatMap((module) => module.routes);
+
   return (
     <Routes>
-      {modules.flatMap(module =>
-        module.routes.reverse().map(route => renderRoute(route))
-      )}
+      {allRoutes.map((route) => {
+        const Layout = route.layout || DefaultLayout;
+        const hasSubModules = route.subModules && route.subModules.length > 0;
+
+        if (hasSubModules) {
+          // Родительский лейаут с Outlet
+          return (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={wrapWithProtection(route, <Layout />)}
+            >
+              {/* index-страница */}
+              <Route
+                index
+                element={wrapWithProtection(
+                  route,
+                  <route.component {...(route.props || {})} />
+                )}
+              />
+              {/* дочерние роуты */}
+              {route.subModules!.map((subRoute) => (
+                <Route
+                  key={subRoute.path}
+                  path={subRoute.path.replace(`${route.path}/`, '')} // делаем относительный путь
+                  element={wrapWithProtection(
+                    subRoute,
+                    <subRoute.component {...(subRoute.props || {})} />
+                  )}
+                />
+              ))}
+            </Route>
+          );
+        } else {
+          // Нет сабмодулей — всё равно оборачиваем в родительский маршрут с Outlet
+          return (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={wrapWithProtection(route, <Layout />)}
+            >
+              <Route
+                index
+                element={wrapWithProtection(
+                  route,
+                  <route.component {...(route.props || {})} />
+                )}
+              />
+            </Route>
+          );
+        }
+      })}
     </Routes>
   );
 };

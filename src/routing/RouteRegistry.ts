@@ -12,9 +12,28 @@ class RouteRegistryClass {
   }
 
   getNavigableRoutes() {
+    const flattenRoutes = (routes: any[], _ = ''): any[] => {
+      return routes.reduce((acc, route) => {
+        const fullPath = route.path;
+
+        if (route.navigable) {
+          acc.push({ ...route, fullPath });
+        }
+
+        if (route.subModules) {
+          acc.push(...flattenRoutes(route.subModules, fullPath));
+        }
+
+        return acc;
+      }, []);
+    };
+
     return this.modules.flatMap(module =>
-      module.routes.filter(route => route.navigable)
-    );
+      flattenRoutes(module.routes)
+    ).map(route => ({
+      ...route,
+      path: route.fullPath || route.path
+    }));
   }
 }
 

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useGetMeQuery } from '../api/authApi'; // путь поправь под свой проект
-import type { Role } from '../types/auth.types';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useGetMeQuery } from '../api/authApi';
+import { Role } from '../types/auth.types';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -16,38 +16,54 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   unauthorizedComponent: UnauthorizedComponent,
   unauthorizedRedirect = '/login',
 }) => {
+  const isPublic = !allowedRoles.length;
   const { data: user, isLoading, isError } = useGetMeQuery();
 
-  // Пока грузим данные — показываем лоадер
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Автоматический редирект из приватных роутов при логауте
+  useEffect(() => {
+    if (!isPublic && !isLoading && (isError || !user)) {
+      if (!UnauthorizedComponent) {
+        navigate(unauthorizedRedirect, {
+          replace: true,
+          state: { from: location },
+        });
+      }
+    }
+  }, [
+    isPublic,
+    isError,
+    isLoading,
+    user,
+    navigate,
+    unauthorizedRedirect,
+    location,
+    UnauthorizedComponent,
+  ]);
+
+  // Публичный маршрут — показываем без проверки
+  if (isPublic) {
+    return <>{children}</>;
+  }
+
+  // Приватный маршрут — лоадер во время запроса
   if (isLoading) {
     return <div>Загружаю, бро...</div>;
   }
 
-  // Если ошибка (401) или нет данных — считаем, что не авторизован
+  // Нет пользователя или ошибка
   if (isError || !user) {
-    if (UnauthorizedComponent) {
-
-      return <>lol<UnauthorizedComponent /></>;
-    }
-    return <Navigate to={unauthorizedRedirect} replace />;
+    return UnauthorizedComponent ? <UnauthorizedComponent /> : null;
   }
 
-  // Если роли не указаны — пускаем
-  if (!allowedRoles.length) {
-    return <>{children}</>;
-  }
-
-  // Проверяем роли
-  const hasRequiredRole = user.roles?.some(role => allowedRoles.includes(role)) ?? false;
-
+  // Проверка роли
+  const hasRequiredRole =
+    user.roles?.some((role) => allowedRoles.includes(role)) ?? false;
   if (!hasRequiredRole) {
-    if (UnauthorizedComponent) {
-      return <>{user.email}<UnauthorizedComponent /></>;
-    }
-    return <Navigate to={unauthorizedRedirect} replace />;
+    return UnauthorizedComponent ? <UnauthorizedComponent /> : null;
   }
 
-  return <>
-    {children}
-  </>;
+  return <>{children}</>;
 };

@@ -25,7 +25,7 @@ export const accountsModule: Module = {
       unauthorizedComponent: GoAuth,
       subModules: [
         {
-          path: '/chats/:id',
+          path: '/accounts/chats/:id',
           component: AccountDialogsPage,
           props: {},
           title: 'Диалоги аккаунта',
