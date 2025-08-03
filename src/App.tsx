@@ -2,14 +2,16 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ModuleRouter } from './routing/ModuleRouter';
 import { RouteRegistry } from './routing/RouteRegistry';
-import { LoginPage } from './pages/LoginPage';
-import { RegisterPage } from './pages/RegisterPage';
+import { LoginPage } from './modules/auth/';
+import { RegisterPage } from './modules/auth/';
 import { accountsModule } from './modules/accounts';
 import { dashboardModule } from './modules/dashboard';
 import './App.css';
+import { teamsModule } from './modules/teams';
 
 RouteRegistry.registerModule(dashboardModule);
 RouteRegistry.registerModule(accountsModule);
+RouteRegistry.registerModule(teamsModule)
 
 export const App: React.FC = () => {
   return (

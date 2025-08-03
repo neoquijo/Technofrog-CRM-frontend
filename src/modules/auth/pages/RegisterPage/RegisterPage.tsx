@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useRegisterMutation } from '../api/authApi';
+import { useRegisterMutation } from '../../../../api/authApi';
 import css from './RegisterPage.module.css';
 
 export const RegisterPage: React.FC = () => {

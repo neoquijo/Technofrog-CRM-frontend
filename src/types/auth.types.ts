@@ -1,3 +1,5 @@
+import type { Team } from "./teams.types";
+
 export enum Role {
   ADMIN = 'ADMIN',
   USER = 'USER',
@@ -9,6 +11,7 @@ export interface User {
   email: string;
   name: string;
   roles?: Role[];
+  teams?: Team[]
 }
 
 export interface AuthState {

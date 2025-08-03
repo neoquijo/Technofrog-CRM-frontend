@@ -27,3 +27,38 @@
   --card-bg: #1f1f1f;
   --card-shadow: rgba(0, 0, 0, 0.3);
 }
+
+:root[data-theme="dark"] {
+  /* Основные цвета */
+  --bg-primary: rgba(15, 23, 42, 0.85);
+  --bg-secondary: rgba(30, 41, 59, 0.9);
+  --bg-tertiary: rgba(51, 65, 85, 0.95);
+  --bg-sidebar: rgba(15, 23, 42, 0.75);
+  --bg-hover: rgba(59, 130, 246, 0.12);
+  --bg-active: rgba(59, 130, 246, 0.2);
+
+  /* Цвета текста */
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #0f172a;
+
+  /* Акцентные цвета */
+  --accent-primary: #60a5fa;
+  --accent-secondary: #3b82f6;
+  --accent-hover: #93c5fd;
+  --accent-gradient: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+
+  /* Границы и тени */
+  --border-color: rgba(71, 85, 105, 0.4);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 32px rgba(96, 165, 250, 0.2);
+
+  /* Стекломорфизм */
+  --glass-bg: rgba(30, 41, 59, 0.6);
+  --glass-border: rgba(71, 85, 105, 0.5);
+  --backdrop-blur: blur(20px);
+  --backdrop-saturate: saturate(150%);
+}

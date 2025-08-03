@@ -3,7 +3,7 @@ import { Role } from '../../types/auth.types';
 import { AccountsPage } from './pages/AccountsPage';
 import { AccountDialogsPage } from './pages/AccountDialogsPage';
 import { DashboardLayout } from '../../layouts/DashboardLayout';
-import { GoAuth } from '../../components/GoAuth';
+import { GoAuth } from '../../shared/components/GoAuth/GoAuth';
 
 import { FaKey } from 'react-icons/fa';
 import { AccountsWidget } from './components/AccountWidget';

@@ -17,12 +17,28 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   unauthorizedRedirect = '/login',
 }) => {
   const isPublic = !allowedRoles.length;
-  const { data: user, isLoading, isError } = useGetMeQuery();
+  const { data: user, isLoading, isError, isSuccess } = useGetMeQuery();
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Автоматический редирект из приватных роутов при логауте
+  const handleLogout = () => {
+    navigate('/login')
+  }
+
+  useEffect(() => {
+    window.addEventListener('logout', handleLogout);
+    return () => window.removeEventListener('logout', handleLogout);
+  })
+
+  useEffect(() => {
+    if (user) {
+      if (!user.teams) {
+        navigate('/createTeam')
+      }
+    }
+  }, [isSuccess])
+
   useEffect(() => {
     if (!isPublic && !isLoading && (isError || !user)) {
       if (!UnauthorizedComponent) {

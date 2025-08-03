@@ -11,6 +11,10 @@ class RouteRegistryClass {
     return this.modules;
   }
 
+  getWidget(id: string) {
+    return this.modules.find(e => e.id == id)?.widget
+  }
+
   getNavigableRoutes() {
     const flattenRoutes = (routes: any[], _ = ''): any[] => {
       return routes.reduce((acc, route) => {

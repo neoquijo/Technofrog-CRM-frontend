@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '../api/authApi';
+import { useLoginMutation } from '../../../../api/authApi';
 import css from './LoginPage.module.css';
 
 export const LoginPage: React.FC = () => {
@@ -21,7 +21,7 @@ export const LoginPage: React.FC = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate(-1)
+      navigate('/')
     }
   }, [isSuccess])
 

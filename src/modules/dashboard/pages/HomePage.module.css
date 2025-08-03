@@ -1,6 +1,7 @@
 .container {
   text-align: center;
   padding: 3rem;
+  height: 100%;
 }
 
 .container h1 {

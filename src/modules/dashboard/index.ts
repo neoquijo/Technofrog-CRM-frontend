@@ -22,7 +22,7 @@ export const dashboardModule: Module = {
       component: ProfilePage,
       title: 'Профиль',
       layout: DashboardLayout,
-      navigable: true,
+      navigable: false,
       icon: FaUser,
       allowedRoles: [Role.USER, Role.ADMIN, Role.MODERATOR],
     }
