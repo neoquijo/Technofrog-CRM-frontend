@@ -34,7 +34,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   useEffect(() => {
     if (user) {
       if (!user.teams) {
-        navigate('/createTeam')
+        // navigate('/createTeam')
       }
     }
   }, [isSuccess])

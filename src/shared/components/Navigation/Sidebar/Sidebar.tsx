@@ -25,8 +25,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className={css.top}>
           {/* Логотип */}
           <div className={css.logo}>
-            <div className={css.logoIcon}>
-              <svg viewBox="0 0 32 32" fill="none">
+            <div className={''}>
+              <img src='/img/logo.png' width={!isCollapsed ? 200 : 70} />
+              {/* <svg viewBox="0 0 32 32" fill="none">
                 <path
                   d="M16 2L2 9v14l14 7 14-7V9L16 2z"
                   stroke="currentColor"
@@ -39,9 +40,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   fill="currentColor"
                   opacity="0.3"
                 />
-              </svg>
+              </svg> */}
             </div>
-            {!isCollapsed && <span className={css.logoText}>Dashboard</span>}
+            {/* {!isCollapsed && <span className={css.logoText}>Dashboard</span>} */}
           </div>
 
           {/* Навигация */}
